@@ -5,44 +5,58 @@ with open('.//Resources//election_data.csv') as csv_file:
     line_count = 0
     voter_id = ''
     county = ''
-    canidate = ''
-    canidate_list = []
-    canidate_vote = []
+    candidate = ''
+    x = ''
+    v = 0
+    candidate_list = []
+    candidate_vote = []
     for row in csv_reader:
         if line_count > 0:
             voter_id = str(row[0])
             county = str(row[1])
-            canidate = str(row[2])
+            candidate = str(row[2])
 
-            if not canidate_list or (canidate not in canidate_list):
-                canidate_list.append(canidate)
-                canidate_vote.append(1)
-            elif canidate in canidate_list:
-                canidate_vote[canidate_list.index(canidate)] += 1
+            if not candidate_list or (candidate not in candidate_list):
+                candidate_list.append(candidate)
+                candidate_vote.append(1)
+            elif candidate in candidate_list:
+                candidate_vote[candidate_list.index(candidate)] += 1
         
         line_count += 1
+    Total_votes = line_count - 1
+    percentage = []
 
+    length = len(candidate_list)
+    for i in range(length):
+        percentage.append(candidate_vote[i] / Total_votes  * 100)
+        if candidate_vote[i] > v:
+            v = candidate_vote[i]
+            x = candidate_list[i]
 
     file = open(".//analysis/results2.txt", "w")
     file.write("Election Results\n")
     file.write("----------------------------\n")
-    file.write("Total votes: "  + "\n")
+    file.write("Total votes: "  + str(Total_votes) + "\n")
     file.write("----------------------------\n")
-    #file.write( + str(canidate_list) + "\n")
+    for i in range(length):
+        file.write(candidate_list[i] + ": " + str(percentage[i]) + " " + str(candidate_vote[i]) + "\n")
+    file.write("----------------------------\n")
+
+    file.write("Winner:" + " " + (x) + "\n")
     
-    #file.write(")
-    #file.write(
-    #file.write(
+    file.write("----------------------------\n")
+    
+
     file.close()
 
-    print("Election Results\n")
-    print("----------------------------\n")
-    print("total votes:")
-    print("-----------------------------\n")
-    #print("Total Months: " + str(num_months) + "\n")
-    #print("Total: $" + str(net_total) + "\n")
-    #print("Average  Change: $" + "\n")
-    #print("Greatest Increase in Profits: " + greatest_profit_month + " ($" + str(greatest_profit) + ")\n")
-    #print("Greatest Decrease in Profits: " + greatest_loss_month + " ($" + str(greatest_loss) + ")\n")
-   
-    print(f'Processed {line_count} lines.')
+    print("Election Results")
+    print("----------------------------")
+    print("total votes:" + str(Total_votes))
+    print("-----------------------------")
+    for i in range(length):
+        print(candidate_list[i] + ": " + str(percentage[i]) + " " + str(candidate_vote[i]))
+    print("-----------------------------")
+                
+    print("Winner:" + " " + (x))
+    
+    print("-----------------------------")
